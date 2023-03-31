@@ -1,5 +1,4 @@
 const db = require("../models");
-const Members = db.Members
 const IncomeExpense = db.IncomeExpense
 const Types = db.Types
 const moment = require('moment-timezone')
