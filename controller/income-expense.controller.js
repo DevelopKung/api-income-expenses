@@ -1,4 +1,5 @@
 const db = require("../models");
+const Members = db.Members
 const IncomeExpense = db.IncomeExpense
 const Types = db.Types
 const moment = require('moment-timezone')
@@ -11,7 +12,7 @@ module.exports = {
         let query = []
         const member_id = req.member._id
 
-        query.push({ $match: { member_id }  })
+        query.push({ $match: { member_id } })
 
         query.push({
           $lookup: {
@@ -43,7 +44,10 @@ module.exports = {
         // })
 
         let data = await IncomeExpense.aggregate(query)
-        res.status(200).send({ status: true, message: "success", payload: data
+        res.status(200).send({
+          status: true,
+          message: "success",
+          payload: data
         });
       } catch (error) {
         res.status(500).send({ status: false, message: error.message });
@@ -68,7 +72,7 @@ module.exports = {
 
   create: async(req, res) => {
     let form = req.body
-    if (form.inc_exp_title&&form.inc_exp_type&&form.inc_exp_group&&form.inc_exp_date&&form.inc_exp_amount&&req.member) {
+    if (form.inc_exp_title && form.inc_exp_type && form.inc_exp_group && form.inc_exp_date && form.inc_exp_amount && req.member) {
       try {
         form.member_id = req.member._id
         await new IncomeExpense(form).save(form)
@@ -84,7 +88,7 @@ module.exports = {
   update: async(req, res) => {
     const id = req.params.id;
     let form = req.body
-    if (form.inc_exp_title&&form.inc_exp_type&&form.inc_exp_group&&form.inc_exp_date&&form.inc_exp_amount&&req.member) {
+    if (form.inc_exp_title && form.inc_exp_type && form.inc_exp_group && form.inc_exp_date && form.inc_exp_amount && req.member) {
       try {
         form.updated_date = new Date()
         await IncomeExpense.findOneAndUpdate({ _id: id }, form)
